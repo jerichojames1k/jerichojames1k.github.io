@@ -1,0 +1,32 @@
+header{
+    padding:10px;
+    border:1px solid black;
+    border-radius:2px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color:gray;
+}
+p{
+    color:white;
+    margin-bottom:-26px;
+}
+fieldset{
+    border:3px;
+    background-color:skyblue;
+    padding: 5px;
+    width: 50%;
+  }
+  /* table,th,tr,td{
+    border-collapse: collapse;
+    color: black;
+    padding:10px;
+  } */
+
+  /* table{
+      border:1px solid black;
+      border-radius: 1px;
+      width: 550px;
+      height: 230px;
+      background-color: aqua;
+  } */
