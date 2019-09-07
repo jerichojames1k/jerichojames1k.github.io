@@ -9188,7 +9188,8 @@
     }));
     Object.defineProperty(MapPoly.prototype, Symbol.toStringTag, d('c', 'Map'));
     
-    },{"./is-native-implemented":83,"./lib/iterator":85,"d":31,"es5-ext/array/#/clear":34,"es5-ext/array/#/e-index-of":35,"es5-ext/object/set-prototype-of":65,"es5-ext/object/valid-callable":68,"es5-ext/object/valid-value":69,"es6-iterator/for-of":75,"es6-iterator/valid-iterable":80,"es6-symbol":87,"event-emitter":92}],87:[function(require,module,exports){
+    },{"./0is-native-implemented":83,"./lib/iterator":85,"d":31,"es5-ext/array/#/clear":34,"es5-ext/array/#/e-index-of":35,"es5-ext/object/set-prototype-of":65,"es5-ext/object/valid-callable":68,"es5-ext/object/valid-value":69,"es6-iterator/for-of":75,
+    "es6-iterator/valid-iterable":80,"es6-symbol":87,"event-emitter":92}],87:[function(require,module,exports){
     'use strict';
     
     module.exports = require('./is-implemented')() ? Symbol : require('./polyfill');
@@ -14904,4 +14905,3 @@
     
     },{}]},{},[26])(26)
     });
-    

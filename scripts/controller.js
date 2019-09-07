@@ -1,52 +1,68 @@
-//var client
-// Create a client instance
-var client = new Paho.Client("broker.hivemq.com", 8000, "clientId");
-var btnConnect = document.getElementById("btn-connect");
-var btnPublish = document.getElementById("btn-publish");
 
-// set callback handlers
-//client.onConnectionLost = onConnectionLost;
-client.onMessageArrived = onMessageArrived;
 
-// connect the client
-//client.connect({onSuccess:onConnect});
+// basic functionalities
+$(document).ready(function () {
+    var topic1= $("input[name='topic']").val();
+    $("#btn-disconnect").click(function () {
+      client.end();
+      alert("It's done!");
+      $("#status").val("Disconnected !");
+      location.reload();
+    })
 
-// called when the client connects
-function onConnect() {
-// Once a connection has been made, make a subscription and send a message.
-console.log("onConnect");
-client.subscribe("World");
-// message = new Paho.Message("Hello");
-// message.destinationName = "World";
-// client.send(message);
-}
+    $("#btn-connect").click(function () {
+  
+      client = mqtt.connect($("#address").val());
+     
+      client.on("connect", function () {
+        $("#status").val("Connected !");
+        console.log("successfully connected");
+      })
+      subs=false;
+      $("#btn-publish").click(function(){
+      
+        var topic= $("input[name='topic']").val();
+        var payload = $("input[name='payload']").val();
+        var row = "<tr><td>"+ topic +"</td><td>"+ payload+"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
+        $("#tbpublish").append(row);
+        subs=true;
+  
+        client.publish(topic, payload)
+      })
+      
+      $("#btn-subscribe").click(function(){
+        var topic=$("input[name='topicSub']").val();
+        var row = "<tr><td>"+ topic +"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
+        $("#tbsubscribe").append(row);
+        $("#btn-publish").click(function(){
+          var payload = $("input[name='payload']").val();
+          if(topic==topic1){
+            var row = "<tr><td>"+ topic +"</td><td>"+ payload+"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
+            $("#tbbroker").append(row);
+          }
+          
+        });
+        topic1 =  $("input[name='topic']").val();
+        
+        client.subscribe(topic)
+        client.on("message", function (topic, payload) {
+          console.log([topic, payload].join(": "));   
+        })
+        
+      })
+      $("#btn-unsubscribe").click(function(){
+        var topic=$("input[name='topicSub']").val();
+        client.unsubscribe(topic)
+        topic1= "";
+      })
+  
+    })
 
-// called when the client loses its connection
-// function onConnectionLost(responseObject) {
-// if (responseObject.errorCode !== 0) {
-// console.log("onConnectionLost:"+responseObject.errorMessage);
-// }
-// }
-
-// called when a message arrives
-function onMessageArrived(message) {
-console.log("onMessageArrived:"+message.payloadString);
-}
-
-btnConnect.addEventListener('click',function(e){
-e.preventDefault();
-console.log("Connect Button")
-// connect the client
-client.connect({onSuccess:onConnect});
-})
-
-btnPublish.addEventListener('click',function(e){
-e.preventDefault();
-console.log("Publish Button")
-var wordText=document.getElementById("textbox").value;
-
-message = new Paho.Message(wordText);
-message.destinationName = "World";
-client.send(message);
-
-})
+  })
+  
+  
+  
+  
+  
+  
+  
