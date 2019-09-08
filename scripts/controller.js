@@ -28,18 +28,17 @@ $(document).ready(function () {
 
       subs=false;
       $("#btn-publish").click(function(){
-      
+        console.log(client.publish(topic, payload));
         var topic= $("input[name='topic']").val();
         var payload = $("input[name='payload']").val();
         var row = "<tr><td>"+ topic +"</td><td>"+ payload+"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
         $("#tbpublish").append(row);
         subs=true;
-  
-        client.publish(topic, payload)
       })
       
       $("#btn-subscribe").click(function(){
         var topic=$("input[name='topicSub']").val();
+        console.log(client.subscribe(topic));
         var row = "<tr><td>"+ topic +"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
         $("#tbsubscribe").append(row);
         $("#btn-publish").click(function(){
@@ -51,9 +50,6 @@ $(document).ready(function () {
           
         });
         topic1 =  $("input[name='topic']").val();
-        
-        client.subscribe(topic)
- 
         
       })
       $("#btn-unsubscribe").click(function(){
