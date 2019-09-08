@@ -12,12 +12,20 @@ $(document).ready(function () {
 
     $("#btn-connect").click(function () {
   
-      client = mqtt.connect($("#address").val());
-     
+      var client = mqtt.connect($("#address").val());
+
+     //Stablishconnection
       client.on("connect", function () {
         $("#status").val("Connected !");
         console.log("successfully connected");
       })
+
+      //message
+      client.on("message", function (topic, payload) {
+        console.log([topic, payload].join(": "));   
+      })
+
+
       subs=false;
       $("#btn-publish").click(function(){
       
@@ -45,9 +53,7 @@ $(document).ready(function () {
         topic1 =  $("input[name='topic']").val();
         
         client.subscribe(topic)
-        client.on("message", function (topic, payload) {
-          console.log([topic, payload].join(": "));   
-        })
+ 
         
       })
       $("#btn-unsubscribe").click(function(){
