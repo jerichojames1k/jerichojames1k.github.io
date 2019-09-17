@@ -1,70 +1,112 @@
-
-
 // basic functionalities
-$(document).ready(function () {
-    var topic1= $("input[name='topic']").val();
-    $("#btn-disconnect").click(function () {
-      client.end();
-      alert("It's done!");
-      $("#status").val("Disconnected !");
-      location.reload();
-    })
 
-    $("#btn-connect").click(function () {
-  
-      var client = mqtt.connect($("#address").val());
+//broker
+var btnConnect = document.getElementById('connect');
+var btnDisConnect = document.getElementById('disconnect');
+var broker = document.getElementById('broker');
+var btnStatus = document.getElementById('status');
 
-     //Stablishconnection
-      client.on("connect", function () {
-        $("#status").val("Connected !");
-        console.log("successfully connected");
-      })
+//publisher
+var btnPublish = document.getElementById('btnPublish');
+var pubTopic = document.getElementById('pubTopic');
+var pubPayload = document.getElementById('pubPayload');
 
-      //message
-      client.on("message", function (topic, payload) {
-        console.log([topic, payload].join(": "));   
-      })
+//subscriber
+var subTopic = document.getElementById('subTopic');
+var btnSubscribe = document.getElementById('btnSubscribe');
+var btnUnsubscribe = document.getElementById('btnUnsubscribe');
+
+btnDisConnect.disabled = true;
+
+//btnConnect
+btnConnect.addEventListener('click', function (e) {
+  e.preventDefault();
+  //client
+  var client = mqtt.connect(broker.value)
+  // client.subscribe("mqtt/demox")
+  //status
+  btnStatus.setAttribute('value', 'Connecting!!!,')
+  client.on("connect", function () {
+    console.log("Successfully-Connencted!");
+    btnStatus.disabled = false;
+    btnDisConnect.disabled = false;
+    btnConnect.disabled = true;
+    btnStatus.setAttribute('value', 'Successfully Connected!')
+    btnStatus.setAttribute('class', 'btn btn-success')
+    btnSubscribe.disabled = false;
+    btnPublish.disabled = false;
+  });
+
+  // client.publish("mqtt/demox", "hello world!")
+
+  btnPublish.addEventListener('click', function (e) {
+    e.preventDefault();
+    client.publish(pubTopic.value, pubPayload.value)
+  })
+
+  //subscribe
+  btnSubscribe.addEventListener('click', function (e) {
+    e.preventDefault();
+    client.subscribe(subTopic.value);
+    btnUnsubscribe.disabled = false;
+    console.log("Subscribe to: " + subTopic.value)
+  })
+
+  //unsubscribe
+  btnUnsubscribe.addEventListener('click', function (e) {
+    e.preventDefault();
+    client.unsubscribe(subTopic.value);
+    console.log("Unsubscribe to " + subTopic.value)
+  })
+
+  //btnDisconnect
+  btnDisConnect.addEventListener('click', function () {
+    client.end();
+    btnStatus.disabled = true;
+    btnDisConnect.disabled = true;
+    btnConnect.disabled = false;
+    btnSubscribe.disabled = true;
+    btnPublish.disabled = true;
+    btnUnsubscribe.disabled = true;
+    console.log('Disconnected');
+    btnStatus.setAttribute('value', 'Successfully Disconnected!')
+    btnStatus.setAttribute('class', 'btn btn-warning')
+  });
 
 
-      subs=false;
-      $("#btn-publish").click(function(){
-        console.log(client.publish(topic, payload));
-        var topic= $("input[name='topic']").val();
-        var payload = $("input[name='payload']").val();
-        var row = "<tr><td>"+ topic +"</td><td>"+ payload+"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
-        $("#tbpublish").append(row);
-        subs=true;
-      })
-      
-      $("#btn-subscribe").click(function(){
-        var topic=$("input[name='topicSub']").val();
-        console.log(client.subscribe(topic));
-        var row = "<tr><td>"+ topic +"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
-        $("#tbsubscribe").append(row);
-        $("#btn-publish").click(function(){
-          var payload = $("input[name='payload']").val();
-          if(topic==topic1){
-            var row = "<tr><td>"+ topic +"</td><td>"+ payload+"</td><td>"+moment().format('MMMM Do YYYY, h:mm:ss a')+ "</td></tr>";
-            $("#tbbroker").append(row);
-          }
-          
-        });
-        topic1 =  $("input[name='topic']").val();
-        
-      })
-      $("#btn-unsubscribe").click(function(){
-        var topic=$("input[name='topicSub']").val();
-        client.unsubscribe(topic)
-        topic1= "";
-      })
-  
-    })
+  client.on("message", function (topic, payload) {
+    //let finalTopic = topic.slice(5);
+    console.log("message= " + [topic, payload].join(": "));
+    let tbl = document.getElementById('receiver');
+    let tbody = document.getElementById('msg');
+    let tr = document.createElement('tr');
+    let msgTopic = document.createElement('td');
+    let msgPayload = document.createElement('td');
+    let msgTime = document.createElement('td');
+    msgTopic.appendChild(document.createTextNode(topic));
+    msgPayload.appendChild(document.createTextNode(payload));
+    msgTime.appendChild(document.createTextNode(moment().format('llll')));
+    tr.appendChild(msgTopic);
+    tr.appendChild(msgPayload);
+    tr.appendChild(msgTime);
+    tbody.appendChild(tr);
+    tbl.appendChild(tbody);
+    
 
   })
-  
-  
-  
-  
-  
-  
-  
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,159 +1,84 @@
+
 <html>
 
-<head>
-  <title>mows</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-</head>
-<style>
+  <head>
+    <title>mows</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"> -->
+      <style>
 
-header{
-    padding:10px;
-    border:1px solid black;
-    border-radius:2px;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    background-color:skyblue;
-}
+        header{
+            padding:10px;
+            border:1px solid black;
+            border-radius:2px;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            background-color:skyblue;
+        }
+        fieldset{
+          background-color:cornflowerblue;
+          }
+          input{
+            border-radius:1px;
+            padding:12px;
+           
+          }
+          #p{
+            color:solid black 2px;
+          }
+          #btnSubscribe:hover,#btnPublish:hover,#connect:hover,#disconnect:hover,#btnUnsubscribe:hover{
+            background-color:green;
+          }
+        </style>
+        
+  </head>
+  
+  <body class="bg-info" style="height:100%;">
+    <div class="container-fluid text-center text-white ">
+            <header>
+              <p id="p">MY MQTT WEB APP</p>
+              <center><img src="jericho.jpg" alt="Smiley face" height="70" width="250"></center>
+            </header><br><br>
 
-p{
-    color:1px solid black;
-    margin-bottom:-26px;
-}
-.btn:hover{
-background-color:red;
-}
+      <fieldset>
+          <center>
+            <h1>Broker</h1>
+            Address: <input id="broker" type="text" value="wss://test.mosquitto.org:8081/mqtt" required><br><br>
+            <input id="connect" class="btn btn-primary" type="button" value="Connect">
+            <input id="disconnect" class="btn btn-primary" type="button" value="Disconnect" disabled><br><br>
+            Status: <input id="status" class="btn btn-warning" type="button" value="*******************"
+              disabled><br><br>
+          </center><hr>
+          <center>
+          <h1>Publish</h1>
+          Topic: <input id="pubTopic" type="text"><br><br>
+          Payload: <input id="pubPayload" type="text"><br><br>
+          <input id="btnPublish" class="btn btn-primary" type="button" value="Publish" disabled>
+          </center><hr>
+          <center>
+            <h1>Subscribe</h1>
+            Topic: <input id="subTopic" type="text" ><br><br>
+            <input id="btnSubscribe" class="btn btn-primary" type="button" value="Subscribe" disabled>
+            <input id="btnUnsubscribe" class="btn btn-primary" type="button" value="Unsubscribe" disabled>
+            <table id="receiver" class="table bg-light table-hover table-responsive-md">
+              <thead class="thead-dark">
+                <th>Topic</th>
+                <th>Payload</th>
+                <th>Time Stamp</th>
+              </thead>
+              <tbody id="msg">
+              </tbody>
+            </table>
+          </center>
+      </fieldset>
 
-  fieldset{
-    border:1px;
-    background-color:gray;
-    border-radius:1px;
-    left: 10%;
-    padding: 15px;
-    width: 50%;
-  }
-  table,th,tr,td{
-    border-collapse: collapse;
-    color: black;
-    padding:10px;
-  }
-  /* h4{
-    background-color: green;
-    color:white;
-    padding: 5px;
-  } */
-  div{
-    background-color: green;
-    color:white;
-    padding: 3px;
-  }
-  input{
-    border-radius: 1px;
-    padding: 5px;
-  }
-  .up{
-    float: left;
-    position: relative;
-    height:80px;
-    width:80px;
-    border-radius: 100%;
-    border: groove;
-    top: -40px;
-    border-color:#66ffff; 
-  }
-  .name{
-    position: relative;
-    float: left;
-    left: 10px;
-    top: -50px;
-    font-size: 40px;
-    border: none;
-    color:white;
-  }
-  div{
-    width: 100%;
-    background-color: green;
-    padding: 60px;
-  }
-  .app{
-    position: relative;
-    float: left;
-    left: -235px;
-    top: 10px;
-    border: none;
-    color:white;
-    font-style:italic;
-  }
-</style>
-
-<body>
-
-        <header>
-                <p>MY MQTT WEB APP</p>
-                 <center><img src="jericho.jpg" alt="Smiley face" height="50" width="100"></center>
-       </header><br><br>
-  <center>
-  <fieldset>
-    <center>
-      <h4>Broker</h4>
-      <label for="address">Address:</label>
-      <input type="text" id="address" value="wss://test.mosquitto.org:8081/mqtt"><br><br>
-      <button type="button" class="btn btn-success" id="btn-connect">Connect</button>
-      <button class="btn btn-success" id="btn-disconnect">Disconnect</button><br><br>
-      <label for="Status">Status:</label>
-      <input type="text" id="status">
-    </center>
-  </fieldset><br>
-  <table id="tbbroker">
-    <thead>
-      <th>Topic</th>
-      <th>Payload</th>
-      <th>Time</th>
-    </thead>
-    <tbody></tbody>
-  </table><br>
-  <fieldset>
-    <center>
-      <h4>Publish</h4>
-      <label for="address">Topic:</label>
-      <input type="text" class="topic" name="topic"><br><br>
-      <label for="Status">Payload:</label>
-      <input type="text" class="payload" name="payload"><br><br>
-      <button class="btn btn-success" id="btn-publish">Publish</button><br>
-    </center>
-  </fieldset>
-  <table id="tbpublish">
-    <thead>
-      <th>Topic</th>
-      <th>Payload</th>
-      <th>Time</th>
-    </thead>
-    <tbody></tbody>
-  </table><br>
-  <fieldset>
-    <center>
-      <h4>Subscribe</h4>
-      <label for="address">Topic:</label>
-      <input type="text" name="topicSub" class="topicSub"><br><br>
-      <button class="btn btn-success" id="btn-subscribe">Subscribe</button>
-      <button class="btn btn-success" id="btn-unsubscribe">Unsubscribe</button><br>
-      
-    </center>
-  </fieldset>
-  <table id="tbsubscribe">
-    <thead>
-      <th>Topic</th>
-      <th>Time</th>
-    </thead>
+           
     
-  </table><br>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
-  <script src="scripts/browserMqtt.js"></script>
-  <script src="scripts/controller.js"></script>
-</center>
-</body>
-
-</html>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="scripts/browserMqtt.js"></script>
+    <script src="scripts/controller.js"></script>
+  
+  </body>
+  
+  </html>
